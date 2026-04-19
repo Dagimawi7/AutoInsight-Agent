@@ -1,50 +1,78 @@
-import { useState } from 'react'
+import { useState } from 'react';
+import './App.css';
 
 function App() {
-  const [analysis, setAnalysis] = useState(""); // stores ai response
-  const [loading, setLoading] = useState(false); // tracks if Ai is working 
-  // users click button -> start the ai process 
+  const [analysis, setAnalysis] = useState(null); 
+  const [loading, setLoading] = useState(false); 
+
   const runAgent = async () => {
-    setLoading(true); // start loading ai is working
-    try { // try api request
-      // Ask our Python server for data!
+    setLoading(true);
+    setAnalysis(null);
+    try { 
       const response = await fetch("http://127.0.0.1:8000/api/analyze");
-      // convert response to json
       const data = await response.json();
-      
-      // Save ai answer on memory to display 
-      setAnalysis(data.analysis);
-    } catch (error) { // if api request fails
-      console.error("Error asking the AI:", error); // show message 
-      setAnalysis("Error: Make sure your Python server is running!");
+      setAnalysis(data.analysis); 
+    } catch (error) { 
+      console.error(error);
     } 
-    setLoading(false); // stop loading
+    setLoading(false); 
   };
 
   return (
-    <div style={{ padding: "40px", fontFamily: "sans-serif" }}>
-      <h1>AutoInsight Agent</h1>
-      <p>Automated Customer Feedback Analysis</p>
-      
-      
-      <button 
-        onClick={runAgent} // when clicked run the ai function 
-        disabled={loading} // disable button while ai is working 
-        style={{ marginTop:"20px", padding: "10px 20px", fontSize: "16px", cursor: "pointer" }}
-      >
-        {loading ? "AI is analyzing..." : "Run Analysis"} 
-        {/* if loading show this text else show this text */}
-      </button>
+    <div className="dashboard">
+      <div className="header-row">
+        <h1>AI Customer Feedback Agent</h1>
+        <button 
+          className="btn-primary"
+          onClick={runAgent} 
+          disabled={loading} 
+        >
+          {loading ? "Agent Processing Data..." : "Run AI Analysis"} 
+        </button>
+      </div>
 
-      {analysis && (
-        <div style={{ marginTop: "30px", padding: "10px", backgroundColor: "#f4f4f5", borderRadius: "8px" }}>
-          <pre style={{ whiteSpace: "pre-wrap", fontFamily: "inherit" }}>
-            {analysis}
-          </pre>
-        </div>
+      {analysis && !loading && (
+        <>
+          <div className="glass-card summary-card">
+            <p style={{ color: "#9ca3af", fontWeight: "600", fontSize: "14px", marginBottom: "8px" }}>EXECUTIVE SUMMARY (LAST 30 DAYS)</p>
+            <p style={{ fontSize: "18px", color: "#fff", lineHeight: "1.6", margin: 0 }}>
+              {analysis.summary}
+            </p>
+          </div>
+
+          <div className="bento-grid">
+            
+            {/* The Left Column: Red Issues */}
+            <div>
+              <div className="column-title">Top 3 Critical Issues</div>
+              <ul>
+                {analysis.problems.map((prob, index) => (
+                  <li key={index} className="glass-card issue-card">
+                    <span className="badge-red">CRITICAL</span>
+                    <p style={{ margin: 0 }}>{prob}</p>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* The Right Column: Green Actions */}
+            <div>
+              <div className="column-title">Recommended Action Plan</div>
+              <ul>
+                {analysis.solutions.map((sol, index) => (
+                  <li key={index} className="glass-card action-card">
+                    <span className="badge-green">TO-DO</span>
+                    <p style={{ margin: 0 }}>{sol}</p>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+          </div>
+        </>
       )}
     </div>
   )
 }
 
-export default App
+export default App;
