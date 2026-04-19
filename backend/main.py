@@ -34,12 +34,24 @@ def read_root():
 def run_agent():
     # Grab our dummy data from tools.py
     complaints = get_complaints()
-    # create the prompt for the ai agent 
-    prompt_text = f"{SYSTEM_PROMPT}\n\nHere are the complaints:\n{complaints}"
-    
-    # call gemini to analyze the data 
-    response = client.models.generate_content( 
-        model="gemini-3-flash-preview", # the model we are using 
-        contents=prompt_text,
+    summary_resp = client.models.generate_content(
+        model="gemini-3-flash-preview",
+        contents=f"Summarize these customer complaints into exactly two short sentences. Keep it plain text: {complaints}"
     )
-    return {"status": "success", "analysis": response.text} # return the response to the frontend 
+    summary = summary_resp.text
+    # takes summary and takes out the main problems 
+    patterns_resp = client.models.generate_content(
+        model="gemini-3-flash-preview",
+        contents=f"Read this summary and list the top 3 specific problems. Output ONLY the problems on new lines starting with a dash (-). Plain text only: {summary}"
+    )
+    patterns = patterns_resp.text
+    # takes problems and comes up with solutions 
+    solutions_resp = client.models.generate_content(
+        model="gemini-3-flash-preview",
+        contents=f"Read these problems and provide 3 immediate actions the company should take to fix them. Output ONLY the actions on new lines starting with a dash (-). Plain text only: {patterns}"
+    )
+    solutions = solutions_resp.text
+    # gives the final report 
+    structured_report = f"QUICK SUMMARY\n{summary}\n\nTOP 3 PROBLEMS\n{patterns}\n\nCOMPANY ACTION PLAN\n{solutions}"
+    
+    return {"status": "success", "analysis": structured_report}

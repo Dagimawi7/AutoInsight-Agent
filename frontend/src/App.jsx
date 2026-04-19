@@ -26,10 +26,11 @@ function App() {
       <h1>AutoInsight Agent</h1>
       <p>Automated Customer Feedback Analysis</p>
       
+      
       <button 
         onClick={runAgent} // when clicked run the ai function 
         disabled={loading} // disable button while ai is working 
-        style={{ padding: "10px 20px", fontSize: "16px", cursor: "pointer" }}
+        style={{ marginTop:"20px", padding: "10px 20px", fontSize: "16px", cursor: "pointer" }}
       >
         {loading ? "AI is analyzing..." : "Run Analysis"} 
         {/* if loading show this text else show this text */}
