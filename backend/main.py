@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from openai import OpenAI
 from dotenv import load_dotenv
 import os
@@ -13,6 +14,14 @@ client = OpenAI()
 
 # Initialize the server 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"], # Allow fronted access
+    allow_credentials=True,
+    allow_methods=["*"], # Allow all types of requests
+    allow_headers=["*"],
+)
 
 @app.get("/")
 def read_root():

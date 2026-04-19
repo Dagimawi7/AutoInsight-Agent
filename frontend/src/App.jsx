@@ -1,120 +1,48 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [analysis, setAnalysis] = useState(""); // stores ai response
+  const [loading, setLoading] = useState(false); // tracks if Ai is working 
+  // users click button -> start the ai process 
+  const runAgent = async () => {
+    setLoading(true); // start loading ai is working
+    try { // try api request
+      // Ask our Python server for data!
+      const response = await fetch("http://127.0.0.1:8000/api/analyze");
+      // convert response to json
+      const data = await response.json();
+      
+      // Save ai answer on memory to display 
+      setAnalysis(data.analysis);
+    } catch (error) { // if api request fails
+      console.error("Error asking the AI:", error); // show message 
+      setAnalysis("Error: Make sure your Python server is running!");
+    } 
+    setLoading(false); // stop loading
+  };
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <div style={{ padding: "40px", fontFamily: "sans-serif" }}>
+      <h1>AutoInsight Agent</h1>
+      <p>Automated Customer Feedback Analysis</p>
+      
+      <button 
+        onClick={runAgent} // when clicked run the ai function 
+        disabled={loading} // disable button while ai is working 
+        style={{ padding: "10px 20px", fontSize: "16px", cursor: "pointer" }}
+      >
+        {loading ? "AI is analyzing..." : "Run Analysis"} 
+        {/* if loading show this text else show this text */}
+      </button>
 
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
+      {analysis && (
+        <div style={{ marginTop: "30px", padding: "20px", backgroundColor: "#f4f4f5", borderRadius: "8px" }}>
+          <pre style={{ whiteSpace: "pre-wrap", fontFamily: "inherit" }}>
+            {analysis}
+          </pre>
         </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
+      )}
+    </div>
   )
 }
 
