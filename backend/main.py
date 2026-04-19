@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from openai import OpenAI
+from google import genai
 from dotenv import load_dotenv
 import os
 from backend.tools import get_complaints
@@ -9,12 +9,13 @@ from backend.prompts import SYSTEM_PROMPT
 # load secret key 
 load_dotenv() 
 
-# Automatically pull your OPENAI_API_KEY from your system environment variables
-client = OpenAI()
+# get the key and set up Gemini
+client = genai.Client()
 
 # Initialize the server 
 app = FastAPI()
 
+# Allow frontend to talk to backend
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:5173"], # Allow fronted access
@@ -23,25 +24,22 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Test if server is running 
 @app.get("/")
 def read_root():
-    return {"message": "Welcome to the AutoInsight Agent API"}
+    return {"message": "Welcome to the AutoInsight Agent API"} 
 
+# run the ai agent when the frontend clicks the button 
 @app.get("/api/analyze")
 def run_agent():
-    # 1. Grab our fake data from tools.py
+    # Grab our dummy data from tools.py
     complaints = get_complaints()
-
-    # 2. Ask the LLM to analyze it
-    response = client.chat.completions.create(
-        model="gpt-4o-mini",
-        messages=[
-            {"role": "system", "content": SYSTEM_PROMPT},
-            {"role": "user", "content": f"Here are the complaints: {complaints}"}
-        ]
-    )
-
-    result_text = response.choices[0].message.content
+    # create the prompt for the ai agent 
+    prompt_text = f"{SYSTEM_PROMPT}\n\nHere are the complaints:\n{complaints}"
     
-    # 3. Return the result back to whoever asked (frontend)
-    return {"status": "success", "analysis": result_text}
+    # call gemini to analyze the data 
+    response = client.models.generate_content( 
+        model="gemini-3-flash-preview", # the model we are using 
+        contents=prompt_text,
+    )
+    return {"status": "success", "analysis": response.text} # return the response to the frontend 

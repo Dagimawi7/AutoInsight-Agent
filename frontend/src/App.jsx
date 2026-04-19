@@ -36,7 +36,7 @@ function App() {
       </button>
 
       {analysis && (
-        <div style={{ marginTop: "30px", padding: "20px", backgroundColor: "#f4f4f5", borderRadius: "8px" }}>
+        <div style={{ marginTop: "30px", padding: "10px", backgroundColor: "#f4f4f5", borderRadius: "8px" }}>
           <pre style={{ whiteSpace: "pre-wrap", fontFamily: "inherit" }}>
             {analysis}
           </pre>
