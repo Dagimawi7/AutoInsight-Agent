@@ -1,13 +1,22 @@
 from fastapi import FastAPI
 from openai import OpenAI
+from dotenv import load_dotenv
+import os
 from backend.tools import get_complaints
 from backend.prompts import SYSTEM_PROMPT
+
+# load secret key 
+load_dotenv() 
 
 # Automatically pull your OPENAI_API_KEY from your system environment variables
 client = OpenAI()
 
-# Initialize the server
+# Initialize the server 
 app = FastAPI()
+
+@app.get("/")
+def read_root():
+    return {"message": "Welcome to the AutoInsight Agent API"}
 
 @app.get("/api/analyze")
 def run_agent():
