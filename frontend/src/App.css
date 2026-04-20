@@ -1,141 +1,270 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-
-body {
-  background-color: #0b0c10; /* Deep designer dark mode */
-  color: #e5e7eb;
-  font-family: 'Inter', sans-serif;
+/* =======================================
+   DIGITAL ART PIECE: THE ETHEREAL OBELISK
+   ======================================= */
+   
+html, body {
   margin: 0;
-  padding: 40px 20px;
+  padding: 0;
+  background-color: #000000;
+  color: #ffffff;
+  font-family: 'Space Grotesk', sans-serif;
+  overflow-x: hidden;
+  height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* --- AMBIENT FLUID LIGHT ENGINE --- */
+.art-canvas {
+  position: relative;
   min-height: 100vh;
-}
-
-.dashboard {
-  max-width: 1100px;
-  margin: 0 auto;
-}
-
-.header-row {
+  width: 100vw;
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  margin-bottom: 40px;
+  z-index: 1;
 }
 
-h1 {
-  font-size: 28px;
-  font-weight: 700;
+.ambient-light {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(120px);
+  z-index: 0;
+  opacity: 0.6;
+  animation: floatLight 20s infinite alternate ease-in-out;
+}
+
+.light-cyan {
+  width: 60vw;
+  height: 60vh;
+  background: #00f2fe;
+  top: -10%;
+  left: -20%;
+  animation-delay: -5s;
+}
+
+.light-magenta {
+  width: 50vw;
+  height: 50vh;
+  background: #fe0979;
+  bottom: -20%;
+  right: -10%;
+  animation-duration: 25s;
+}
+
+.light-violet {
+  width: 40vw;
+  height: 40vh;
+  background: #6b0fdf;
+  top: 40%;
+  left: 30%;
+  opacity: 0.4;
+  animation-duration: 30s;
+  animation-direction: alternate-reverse;
+}
+
+@keyframes floatLight {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(10vw, 15vh) scale(1.2); }
+  100% { transform: translate(-10vw, -10vh) scale(0.8); }
+}
+
+/* --- FOREGROUND INTERFACE --- */
+.interface-container {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 1400px;
+  padding: 5vh 5vw;
+  box-sizing: border-box;
+}
+
+/* Header & Typography */
+.art-header {
+  margin-bottom: 10vh;
+  text-align: center;
+  animation: apparition 2s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+}
+
+.art-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: clamp(3rem, 8vw, 8rem);
+  font-weight: 200;
+  letter-spacing: -0.04em;
   margin: 0;
-  background: linear-gradient(to right, #fff, #9ca3af);
+  line-height: 1;
+  text-transform: uppercase;
+  background: linear-gradient(180deg, #ffffff 0%, rgba(255,255,255,0.2) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-.btn-primary {
-  background: #1f2937;
-  color: white;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 12px 24px;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 600;
+.art-subtitle {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 300;
+  font-size: 1rem;
+  letter-spacing: 0.5em;
+  color: rgba(255, 255, 255, 0.5);
+  margin-top: 1rem;
+  text-transform: uppercase;
+}
+
+/* The Core Button */
+.core-activator {
+  position: relative;
+  display: block;
+  margin: 0 auto;
+  background: transparent;
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.3);
+  padding: 1rem 3rem;
+  border-radius: 100px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1rem;
+  font-weight: 300;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
   cursor: pointer;
-  transition: 0.3s;
+  overflow: hidden;
+  transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+  backdrop-filter: blur(10px);
 }
 
-.btn-primary:hover:not(:disabled) {
-  background: #374151;
-  border-color: rgba(255, 255, 255, 0.3);
+.core-activator::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: #ffffff;
+  border-radius: 100px;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+  z-index: -1;
 }
 
-.btn-primary:disabled {
+.core-activator:hover {
+  color: #000;
+  border-color: #fff;
+}
+
+.core-activator:hover::before {
+  transform: scaleX(1);
+}
+
+.core-activator:disabled {
   opacity: 0.5;
   cursor: wait;
 }
 
-/* Base Glass Card */
-.glass-card {
-  background: rgba(31, 41, 55, 0.4);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 16px;
-  padding: 24px;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+/* Abstract Loading */
+.loading-pulse {
+  animation: pulseOpacity 1.5s infinite alternate;
 }
 
-.summary-card {
-  margin-bottom: 24px;
-  border-top: 1px solid rgba(139, 92, 246, 0.5); /* Subtle purple top */
-  background: linear-gradient(180deg, rgba(139, 92, 246, 0.05) 0%, rgba(31, 41, 55, 0.4) 100%);
+@keyframes pulseOpacity {
+  0% { opacity: 0.3; letter-spacing: 0.2em; }
+  100% { opacity: 1; letter-spacing: 0.3em; }
 }
 
-.bento-grid {
+/* --- THE CONSTELLATION DATA LAYOUT --- */
+.data-constellation {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 24px;
+  grid-template-columns: 1fr;
+  gap: 8vh;
+  margin-top: 10vh;
 }
 
-/* Column Titles */
-.column-title {
-  font-size: 18px;
-  font-weight: 600;
-  margin-bottom: 16px;
+@media (min-width: 1000px) {
+  .data-constellation {
+    grid-template-columns: 1.2fr 1fr 1fr;
+    gap: 4vw;
+  }
+}
+
+/* Glass Shards (The Cards) */
+.glass-shard {
+  position: relative;
+  background: rgba(255, 255, 255, 0.01);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-left: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 2rem;
+  opacity: 0;
+  transform: translateY(30px);
+  animation: apparition 1.5s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+}
+
+.summary-block {
+  border-left: 2px solid #00f2fe;
+}
+
+.issue-block {
+  border-left: 1px solid #fe0979;
+}
+
+.action-block {
+  border-left: 1px solid #00f2fe;
+}
+
+/* Sequencing */
+.stagger-1 { animation-delay: 0.2s; }
+.stagger-2 { animation-delay: 0.4s; }
+.stagger-3 { animation-delay: 0.6s; }
+
+.shard-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 300;
+  font-size: 0.8rem;
+  letter-spacing: 0.3em;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 2rem;
+  text-transform: uppercase;
+}
+
+.summary-text {
+  font-family: 'Outfit', sans-serif;
+  font-size: clamp(1.2rem, 2vw, 2rem);
+  font-weight: 300;
+  line-height: 1.4;
   color: #fff;
+  margin: 0;
 }
 
-/* List Formatting */
-ul {
+ul.abstract-list {
   list-style: none;
   padding: 0;
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 2rem;
 }
 
-li {
-  font-size: 15px;
-  line-height: 1.5;
+.abstract-list li {
+  position: relative;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1rem;
+  font-weight: 300;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.8);
+  padding-left: 1.5rem;
 }
 
-/* The Red Badges (Issues) */
-.issue-card {
-  border: 1px solid rgba(239, 68, 68, 0.2);
-  background: radial-gradient(circle at top left, rgba(239,68,68,0.1) 0%, transparent 40%);
-  transition: 0.3s;
-}
-.issue-card:hover {
-  border-color: rgba(239, 68, 68, 0.4);
-}
-.badge-red {
-  display: inline-block;
-  background: rgba(239, 68, 68, 0.2);
-  color: #ef4444;
-  font-size: 12px;
-  font-weight: 700;
-  padding: 4px 8px;
-  border-radius: 4px;
-  margin-bottom: 8px;
-  letter-spacing: 0.5px;
+.abstract-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 10px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
 }
 
-/* The Green Badges (Actions) */
-.action-card {
-  border: 1px solid rgba(16, 185, 129, 0.2);
-  background: radial-gradient(circle at top left, rgba(16,185,129,0.1) 0%, transparent 40%);
-  transition: 0.3s;
-}
-.action-card:hover {
-  border-color: rgba(16, 185, 129, 0.4);
-}
-.badge-green {
-  display: inline-block;
-  background: rgba(16, 185, 129, 0.2);
-  color: #10b981;
-  font-size: 12px;
-  font-weight: 700;
-  padding: 4px 8px;
-  border-radius: 4px;
-  margin-bottom: 8px;
-  letter-spacing: 0.5px;
+.issue-block .abstract-list li::before { background: #fe0979; }
+.action-block .abstract-list li::before { background: #00f2fe; }
+
+@keyframes apparition {
+  0% { opacity: 0; transform: translateY(40px) scale(0.98); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
 }

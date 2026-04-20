@@ -19,58 +19,58 @@ function App() {
   };
 
   return (
-    <div className="dashboard">
-      <div className="header-row">
-        <h1>AI Customer Feedback Agent</h1>
+    <div className="art-canvas">
+      {/* Background Fluid Light System */}
+      <div className="ambient-light light-cyan"></div>
+      <div className="ambient-light light-magenta"></div>
+      <div className="ambient-light light-violet"></div>
+
+      <div className="interface-container">
+        
+        <header className="art-header">
+          <h1 className="art-title">Noctra</h1>
+          <div className="art-subtitle">AutoInsight Agent</div>
+        </header>
+
         <button 
-          className="btn-primary"
+          className="core-activator"
           onClick={runAgent} 
           disabled={loading} 
         >
-          {loading ? "Agent Processing Data..." : "Run AI Analysis"} 
+          {loading ? <span className="loading-pulse">Awakening...</span> : "Run Analysis"} 
         </button>
-      </div>
 
-      {analysis && !loading && (
-        <>
-          <div className="glass-card summary-card">
-            <p style={{ color: "#9ca3af", fontWeight: "600", fontSize: "14px", marginBottom: "8px" }}>EXECUTIVE SUMMARY (LAST 30 DAYS)</p>
-            <p style={{ fontSize: "18px", color: "#fff", lineHeight: "1.6", margin: 0 }}>
-              {analysis.summary}
-            </p>
-          </div>
-
-          <div className="bento-grid">
+        {analysis && !loading && (
+          <div className="data-constellation">
             
-            {/* The Left Column: Red Issues */}
-            <div>
-              <div className="column-title">Top 3 Critical Issues</div>
-              <ul>
+            <div className="glass-shard summary-block stagger-1">
+              <div className="shard-title">Summary</div>
+              <p className="summary-text">
+                {analysis.summary}
+              </p>
+            </div>
+
+            <div className="glass-shard issue-block stagger-2">
+              <div className="shard-title">Top 3 Problems</div>
+              <ul className="abstract-list">
                 {analysis.problems.map((prob, index) => (
-                  <li key={index} className="glass-card issue-card">
-                    <span className="badge-red">CRITICAL</span>
-                    <p style={{ margin: 0 }}>{prob}</p>
-                  </li>
+                  <li key={index}>{prob}</li>
                 ))}
               </ul>
             </div>
 
-            {/* The Right Column: Green Actions */}
-            <div>
-              <div className="column-title">Recommended Action Plan</div>
-              <ul>
+            <div className="glass-shard action-block stagger-3">
+              <div className="shard-title">Recommended Actions</div>
+              <ul className="abstract-list">
                 {analysis.solutions.map((sol, index) => (
-                  <li key={index} className="glass-card action-card">
-                    <span className="badge-green">TO-DO</span>
-                    <p style={{ margin: 0 }}>{sol}</p>
-                  </li>
+                  <li key={index}>{sol}</li>
                 ))}
               </ul>
             </div>
 
           </div>
-        </>
-      )}
+        )}
+      </div>
     </div>
   )
 }
